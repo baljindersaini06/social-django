@@ -12,6 +12,7 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 from myapp.models import SiteConfiguration,SmtpConfiguration
 
+
 def signup(request):
     if request.method == 'POST':
         form = UserCreateForm(request.POST)
@@ -82,8 +83,7 @@ def profile_account(request):
         smtp_set=SmtpConfiguration.objects.get(user=request.user)
     except SmtpConfiguration.DoesNotExist:
         smtp_set = None
-   
-   
+
     if request.method == "POST":
         old_password = request.POST.get("old_password")
         if 'btnform2' in request.POST:
@@ -152,6 +152,7 @@ def profile_account(request):
             site_profile_form = SiteForm(instance=SiteConfiguration.objects.get(user=request.user)) 
         elif SmtpConfiguration.objects.filter(user=request.user).exists():
             smtp_form = SmtpForm(instance=SmtpConfiguration.objects.get(user=request.user))        
+
     return TemplateResponse(request, template="myapp/extra_profile_account.html", context={
         'password_form': password_form,
         'profile_form': profile_form,
@@ -179,6 +180,7 @@ def profile_account(request):
        
 #     })
 
+
 def test(request):
   response_str = "false"
   if request.is_ajax():
@@ -187,9 +189,6 @@ def test(request):
     if(request_user.check_password(old_password) == True):
         response_str = "true"
     return HttpResponse(response_str)
-
-
-
 
 
 # @login_required

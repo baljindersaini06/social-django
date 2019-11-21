@@ -100,13 +100,10 @@ class UpdateSiteForm(forms.ModelForm):
     site_logo = forms.ImageField(required=True)
     site_address = forms.CharField(max_length=200,required=True)
     copy_right = forms.CharField(max_length=200,required=True)
-    
-        
+
     class Meta:
         model = SiteConfiguration
         fields = ['site_name', 'site_email', 'site_favicon','site_logo','site_address','copy_right']
-
-
 
 
 class SmtpForm(forms.ModelForm):
