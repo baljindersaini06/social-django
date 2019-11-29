@@ -13,10 +13,10 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 import os
 
 
-LOGIN_REDIRECT_URL = "/dashboard"
-LOGIN_URL = "/"
+LOGIN_REDIRECT_URL = "/"
+LOGIN_URL = 'two_factor:login'
 
-LOGOUT_REDIRECT_URL = "/"
+LOGOUT_REDIRECT_URL = 'two_factor:login'
 LOGOUT_URL = "/accounts/logout/"
 
 
@@ -47,6 +47,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'social_django',
     'myapp',
+    'django_otp',
+    'django_otp.plugins.otp_static',
+    'django_otp.plugins.otp_totp',
+    'django_otp.plugins.otp_hotp',
+    'two_factor',
 ]
 
 
@@ -62,6 +67,9 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'social_django.middleware.SocialAuthExceptionMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django_otp.middleware.OTPMiddleware',
+    'two_factor.middleware.threadlocals.ThreadLocals',
 ]
 
 ROOT_URLCONF = 'myproject.urls'
@@ -164,3 +172,31 @@ SOCIAL_AUTH_GITHUB_SECRET = '7a5bf96f6b6e902743b590a5beffc6c4fab08209'
 
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '148596708475-emjorekg73idmgr092rblmg1f7pf986k.apps.googleusercontent.com'
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'CwQutDwpjta1Vadly-HbHRgr'
+
+PHONENUMBER_DEFAULT_REGION = 'IN'
+
+
+TWILIO_ACCOUNT_SID='AC5cdec0863e098592dedfaf4b5db7142b'
+TWILIO_AUTH_TOKEN='7cead08ab1c5d4bd66e845e2bba71eb6'
+TWILIO_CALLER_ID='+919888098880'
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'two_factor': {
+            'handlers': ['console'],
+            'level': 'INFO',
+        }
+    }
+}
+
+TWO_FACTOR_CALL_GATEWAY = 'two_factor.gateways.fake.Fake'
+TWO_FACTOR_SMS_GATEWAY = 'two_factor.gateways.fake.Fake'
+TWILIO_SMS_CALLER_ID = '+919888098880'

@@ -17,12 +17,16 @@ from django.contrib import admin
 from django.conf import settings
 from django.urls import include,path
 from django.conf.urls.static import static
+from two_factor.urls import urlpatterns as tf_urls
+from two_factor.gateways.twilio.urls import urlpatterns as tf_twilio_urls
 
 urlpatterns = [
     path('', include('myapp.urls')),
     path('admin/', admin.site.urls),
     path('accounts/', include('django.contrib.auth.urls')),
     path('oauth/', include('social_django.urls', namespace='social')),
+    path('', include(tf_urls)),
+    path('', include(tf_twilio_urls)),
     ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 if settings.DEBUG:

@@ -11,6 +11,8 @@ from django.contrib.auth.hashers import check_password
 from django.contrib.auth import get_user_model
 User = get_user_model()
 from myapp.models import SiteConfiguration,SmtpConfiguration
+from django_otp.decorators import otp_required
+from two_factor.models import PhoneDevice
 
 
 def signup(request):
@@ -25,9 +27,18 @@ def signup(request):
         form = UserCreateForm()
     return render(request, 'auth/user_form.html', {'form': form})
 
+#@otp_required
 @login_required
 def index(request):
-    return render(request, 'myapp/index.html')
+    try:
+        a=PhoneDevice.objects.filter(user=request.user)
+        if a:
+            return render(request, 'myapp/index.html')
+        else:
+            return render(request, 'myapp/index.html')
+
+    except PhoneDevice.DoesNotExist:
+        a = None
 
 
 @login_required
@@ -55,7 +66,7 @@ def login_user(request):
             if user is not None:
                 if user.is_active:
                     login(request, user)    
-                    return redirect('dashboard')
+                    return redirect('/')
                     
     else:
         login_form = LoginForm()
