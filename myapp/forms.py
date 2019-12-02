@@ -113,4 +113,3 @@ class SmtpForm(forms.ModelForm):
     class Meta:
         model = SmtpConfiguration
         fields = ['smtp_email', 'smtp_password']
-
